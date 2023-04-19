@@ -1,16 +1,19 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -pedantic -std=c99
+CFLAGS=-Wall -Wextra -Wpedantic -std=c99
+OBJ=funciones.o lab1.o
+DEPS=funciones.h
+EXEC=lab1
 
-all: programa
+all: $(EXEC)
 
-programa: main.o funciones.o
-	$(CC) $(CFLAGS) -o programa main.o funciones.o
+$(EXEC): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $@
 
-main.o: main.c funciones.h definiciones.h
-	$(CC) $(CFLAGS) -c main.c
+funciones.o: funciones.c $(DEPS)
+	$(CC) $(CFLAGS) -c $<
 
-funciones.o: funciones.c funciones.h
-	$(CC) $(CFLAGS) -c funciones.c
+lab1.o: lab1.c $(DEPS)
+	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f programa *.o
+	rm -f $(OBJ) $(EXEC)
