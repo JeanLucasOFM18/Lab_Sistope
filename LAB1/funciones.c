@@ -4,40 +4,47 @@ int analisisSecuencias(int num_secuencias, char **secuencias, char *archivo_sali
     FILE *archivo2;
     archivo2 = fopen(archivo_salida, "w");
     int etapa, i, j, si, no;
-    etapa = i = j = si = no = 0;
+    i = j = si = no = 0;
+    etapa = 1;
     while(i < num_secuencias){
         int largo_elemento = strlen(secuencias[i]);
         j = 0; // Se reinicia j en cada iteracion
         while(j < largo_elemento){
-            if(etapa == 0){
+            if(etapa == 1){
                 if(secuencias[i][j] == 'G'){
-                    etapa = 1;
-                }
-                else{
-                    etapa = 0;
-                }
-            }
-            else if(etapa == 1){
-                if(secuencias[i][j] == 'T'){
                     etapa = 2;
                 }
                 else{
-                    etapa = 0;
+                    etapa = 1;
                 }
             }
             else if(etapa == 2){
-                if(secuencias[i][j] == 'C'){
+                if(secuencias[i][j] == 'T'){
                     etapa = 3;
                 }
-                else if(secuencias[i][j] == 'T'){
+                else if(secuencias[i][j] == 'G'){
                     etapa = 2;
                 }
                 else{
-                    etapa = 0;
+                    etapa = 1;
                 }
             }
             else if(etapa == 3){
-                etapa = 4; // Se elimina la condicion if para pasar a la etapa 4 directamente
+                if(secuencias[i][j] == 'C'){
+                    etapa = 4;
+                }
+                else if(secuencias[i][j] == 'T'){
+                    etapa = 3;
+                }
+                else if(secuencias[i][j] == 'G'){
+                    etapa = 2;
+                }
+                else{
+                    etapa = 1;
+                }
+            }
+            else if(etapa == 4){
+                j = largo_elemento;
             }
             j = j + 1;
         }
@@ -50,7 +57,7 @@ int analisisSecuencias(int num_secuencias, char **secuencias, char *archivo_sali
             no = no + 1;
         }
         i = i + 1;
-        etapa = 0; // Se reinicia etapa en cada iteracion
+        etapa = 1; // Se reinicia etapa en cada iteracion
     }
     fprintf(archivo2, "\nTotal de expresiones que Si son regulares: %i \n", si);
     fprintf(archivo2, "Total de expresiones que No son regulares: %i \n", no);
